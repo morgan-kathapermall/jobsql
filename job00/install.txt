@@ -1,0 +1,53 @@
+Installing and Configuring MySQL/MariaDB:
+$ sudo apt install mariadb-server mariadb-client
+
+$ sudo mysql_secure_installation
+
+Press <Enter>.
+Now, press Y and then press <Enter>.
+Now, type in your root password and press <Enter>.
+Type in your root password again and press <Enter>.
+Press Y and then press <Enter> to remove anonymous users.
+If you don’t want to allow root login remotely, press Y. Otherwise, press N. Then, press <Enter>.
+Now, press Y and press <Enter> to remove test database.
+Now, press Y and then press <Enter> to reload the privilege table.
+
+mysql -u root -p
+
+Now, create a new user and grant all the privileges to the user with the following SQL statement:
+
+GRANT ALL ON *.* TO 'morgan'@'localhost' IDENTIFIED BY '123';
+FLUSH PRIVILEGES;
+\q
+
+
+$ sudo apt install apache2 php php-json php-mbstring php-zip php-gd php-xml php-curl php-mysql
+
+$ wget https://files.phpmyadmin.net/phpMyAdmin/4.9.0.1/
+phpMyAdmin-4.9.0.1-all-languages.zip
+
+$ sudo unzip phpMyAdmin-4.9.0.1-all-languages.zip -d /opt
+$ sudo mv -v /opt/phpMyAdmin-4.9.0.1-all-languages /opt/phpMyAdmin
+$ sudo chown -Rfv www-data:www-data /opt/phpMyAdmin
+
+$ sudo nano /etc/apache2/sites-available/phpmyadmin.conf
+<VirtualHost *:9000>
+ServerAdmin webmaster@localhost
+DocumentRoot /opt/phpMyAdmin
+ 
+<Directory /opt/phpMyAdmin>
+Options Indexes FollowSymLinks
+AllowOverride none
+Require all granted
+</Directory>
+ErrorLog ${APACHE_LOG_DIR}/error_phpmyadmin.log
+CustomLog ${APACHE_LOG_DIR}/access_phpmyadmin.log combined
+</VirtualHost>
+
+
+$ sudo nano /etc/apache2/ports.conf
+Now, add the line “Listen 9000” as marked in the screenshot below. Once you’re done, save the configuration file by pressing <Ctrl> + X followed by Y and <Enter>.
+
+
+$ sudo a2ensite phpmyadmin.conf
+$ sudo systemctl restart apache2
